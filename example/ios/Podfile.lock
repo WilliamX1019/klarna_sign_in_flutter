@@ -1,0 +1,37 @@
+PODS:
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - klarna_sign_in_flutter (0.1.0):
+    - Flutter
+    - KlarnaMobileSDK
+  - KlarnaMobileSDK (2.7.2):
+    - KlarnaMobileSDK/basic (= 2.7.2)
+  - KlarnaMobileSDK/basic (2.7.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - klarna_sign_in_flutter (from `.symlinks/plugins/klarna_sign_in_flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - KlarnaMobileSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  klarna_sign_in_flutter:
+    :path: ".symlinks/plugins/klarna_sign_in_flutter/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  klarna_sign_in_flutter: 8f5006b1e5bb8aaa759ea07bb251da82f0e20b27
+  KlarnaMobileSDK: 52bc4ef6f675c8dda45bc99c2c8a11e12a856928
+
+PODFILE CHECKSUM: f24d1be680ea155d8fe377de43e5448ade2bb0cc
+
+COCOAPODS: 1.15.2
