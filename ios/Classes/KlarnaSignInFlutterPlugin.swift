@@ -25,21 +25,16 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
 
     // FlutterStreamHandler
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        MainActor.run {
-            self.eventSink = events
-        }
+        self.eventSink = events
         return nil
     }
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        MainActor.run {
-            self.eventSink = nil
-        }
+        self.eventSink = nil
         return nil
     }
 
     // Flutter Method Calls
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-         MainActor.run {
         switch call.method {
         case "initialize":
             guard let args = call.arguments as? [String: Any], let returnUrlStr = args["returnUrl"] as? String, let url = URL(string: returnUrlStr) else {
@@ -88,23 +83,23 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         default:
             result(FlutterMethodNotImplemented)
         }
-         }
+         
     }
 
     // KlarnaEventHandler
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, dispatchedEvent event: KlarnaProductEvent) {
-        MainActor.run {
+        
         var map: [String: Any] = ["action": event.action]
         map["params"] = event.params
         eventSink?(map)
-        }
+        
     }
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, encounteredError error: KlarnaError) {
-        MainActor.run {
+        
         var map: [String: Any] = ["action": "ERROR"]
         map["params"] = ["message": error.localizedDescription]
         eventSink?(map)
-        }
+        
     }
     // ASWebAuthenticationPresentationContextProviding
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {

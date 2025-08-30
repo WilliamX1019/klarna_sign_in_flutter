@@ -12,6 +12,7 @@ A Flutter plugin for Sign in with Klarna, supporting iOS and Android.
   s.source_files = 'Classes/**/*'
   s.requires_arc = true
   s.platform     = :ios, '13.0'
+  s.swift_version = '5.0'
   s.dependency 'Flutter'        # 必须加
   s.dependency 'KlarnaMobileSDK'
   s.frameworks = 'AuthenticationServices', 'UIKit'

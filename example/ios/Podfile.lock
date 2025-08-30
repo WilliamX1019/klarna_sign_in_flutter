@@ -29,7 +29,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  klarna_sign_in_flutter: 8f5006b1e5bb8aaa759ea07bb251da82f0e20b27
+  klarna_sign_in_flutter: a5bb70607a5daf89ab4e4350cc4ac6f29e757bcc
   KlarnaMobileSDK: 52bc4ef6f675c8dda45bc99c2c8a11e12a856928
 
 PODFILE CHECKSUM: f24d1be680ea155d8fe377de43e5448ade2bb0cc
