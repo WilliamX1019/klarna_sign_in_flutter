@@ -3,6 +3,7 @@ import UIKit
 import KlarnaMobileSDK
 import AuthenticationServices
 
+@MainActor
 public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, KlarnaEventHandler, ASWebAuthenticationPresentationContextProviding {
 
     private var eventSink: FlutterEventSink?
@@ -13,7 +14,7 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     private var region: KlarnaRegion = .na
     private var theme: KlarnaTheme = .light
 
-   nonisolated public static func register(with registrar: FlutterPluginRegistrar) {
+    public static func register(with registrar: FlutterPluginRegistrar) {
         let method = FlutterMethodChannel(name: "klarna_signin/methods", binaryMessenger: registrar.messenger())
         let events = FlutterEventChannel(name: "klarna_signin/events", binaryMessenger: registrar.messenger())
 
@@ -23,17 +24,17 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
 
     // FlutterStreamHandler
-   nonisolated public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = events
         return nil
     }
-   nonisolated public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         eventSink = nil
         return nil
     }
 
     // Flutter Method Calls
-   nonisolated public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "initialize":
             guard let args = call.arguments as? [String: Any], let returnUrlStr = args["returnUrl"] as? String, let url = URL(string: returnUrlStr) else {
@@ -85,12 +86,12 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
 
     // KlarnaEventHandler
-   nonisolated public func klarnaComponent(_ klarnaComponent: KlarnaComponent, dispatchedEvent event: KlarnaProductEvent) {
+    public func klarnaComponent(_ klarnaComponent: KlarnaComponent, dispatchedEvent event: KlarnaProductEvent) {
         var map: [String: Any] = ["action": event.action]
         map["params"] = event.params
         eventSink?(map)
     }
-   nonisolated public func klarnaComponent(_ klarnaComponent: KlarnaComponent, encounteredError error: KlarnaError) {
+    public func klarnaComponent(_ klarnaComponent: KlarnaComponent, encounteredError error: KlarnaError) {
         var map: [String: Any] = ["action": "ERROR"]
         map["params"] = ["message": error.localizedDescription]
         eventSink?(map)
