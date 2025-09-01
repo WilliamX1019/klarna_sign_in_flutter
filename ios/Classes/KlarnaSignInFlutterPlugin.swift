@@ -86,27 +86,72 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
          
     }
 
+    // 递归序列化
+    private func serializeParam(_ value: Any) -> Any {
+        if let token = value as? KlarnaSignInToken {
+            return [
+                "idToken": token.idToken ?? "",
+                "accessToken": token.accessToken ?? "",
+                "refreshToken": token.refreshToken ?? "",
+                "scope": token.scope ?? "",
+                "tokenType": token.tokenType ?? "",
+                "expiresIn": token.expiresIn ?? 0
+            ]
+        } else if let dict = value as? [String: Any] {
+            var serialized: [String: Any] = [:]
+            for (k, v) in dict {
+                serialized[k] = serializeParam(v)
+            }
+            return serialized
+        } else if let array = value as? [Any] {
+            return array.map { serializeParam($0) }
+        } else {
+            return value
+        }
+    }
     // KlarnaEventHandler
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, dispatchedEvent event: KlarnaProductEvent) {
         
-        var map: [String: Any] = ["action": event.action]
-        map["params"] = event.params
-        eventSink?(map)
+    let map: [String: Any] = [
+        "action": event.action,
+        "params": serializeParam(event.params)
+    ]
+            // 确保在主线程回调 Flutter
+    DispatchQueue.main.async {
+        self.eventSink?(map)
+    }
         
     }
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, encounteredError error: KlarnaError) {
         
         var map: [String: Any] = ["action": "ERROR"]
         map["params"] = ["message": error.localizedDescription]
-        eventSink?(map)
+            // 确保在主线程回调 Flutter
+    DispatchQueue.main.async {
+        self.eventSink?(map)
+    }
         
     }
     // ASWebAuthenticationPresentationContextProviding
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let key = windowScene.windows.first(where: { $0.isKeyWindow }) {
-            return key
+        if Thread.isMainThread {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let key = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return key
+            } else {
+                return UIApplication.shared.windows.first ?? UIWindow()
+            }
+        } else {
+            var anchor: ASPresentationAnchor? = nil
+            DispatchQueue.main.sync {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let key = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                    anchor = key
+                } else {
+                    anchor = UIApplication.shared.windows.first
+                }
+            }
+            return anchor ?? UIWindow()
         }
-        return UIApplication.shared.windows.first ?? UIWindow()
     }
 }
