@@ -39,9 +39,11 @@ class KlarnaSignInPlatform {
   }
 
   static Stream<KlarnaEvent> events() {
-    _eventStream ??= _events
-        .receiveBroadcastStream()
-        .map((e) => KlarnaEvent.fromMap((e as Map).cast<dynamic, dynamic>()));
+    _eventStream ??= _events.receiveBroadcastStream().map((e) {
+      print('获取到的回调结果 = $e');
+      
+      return KlarnaEvent.fromMap(e);
+    });
     return _eventStream!;
   }
 }

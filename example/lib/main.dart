@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:klarna_sign_in_flutter/klarna_sign_in_flutter.dart';
-
 
 void main() => runApp(const MyApp());
 
@@ -29,18 +30,35 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     KlarnaSignInPlatform.events().listen((e) {
-      switch (e.action) {
-        case 'TOKEN':
-          setState(() { _token = e.params?['klarnaToken'] as String?; });
-          break;
-        case 'USER_CANCELLED':
-          setState(() { _error = 'User cancelled'; });
-          break;
-        case 'ERROR':
-          setState(() { _error = e.params?['message'] as String? ?? 'Unknown error'; });
-          break;
-        default:
-          debugPrint('Event: ${e.action}, params: ${e.params}');
+      final action = e.action;
+      final params = e.params;
+
+      if (action == 'KlarnaSignInToken' && Platform.isAndroid) {
+        if (params != null && params['KlarnaSignInToken'] != null) {
+          final tokenData = params['KlarnaSignInToken'];
+          final idToken = tokenData['idToken'];
+          final accessToken = tokenData['accessToken'];
+          print("✅ idToken: $idToken, accessToken: $accessToken");
+        } else {
+          print("⚠️ klarnaToken event received but tokenData is null");
+        }
+      }
+      if (action == 'klarnaToken' && Platform.isIOS) {
+        if (params != null && params['klarnaToken'] != null) {
+          final tokenData = params['klarnaToken'];
+          final idToken = tokenData['idToken'];
+          final accessToken = tokenData['accessToken'];
+          print("✅ idToken: $idToken, accessToken: $accessToken");
+        } else {
+          print("⚠️ klarnaToken event received but tokenData is null");
+        }
+      }
+      
+       else if (action == 'ERROR') {
+        final message = params?['message'] ?? "Unknown error";
+        print("❌ Klarna error: $message");
+      } else {
+        print("ℹ️ Other event: $action, params: $params");
       }
     });
   }
@@ -48,7 +66,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _init() async {
     //<data android:scheme="com.unice.lqhair" android:host="klarnaLogin"/>
     await KlarnaSignInPlatform.initialize(
-      returnUrl: 'com.unice.lqhair://klarnaLogin',
+      returnUrl: 'com.unice.longqihair://klarnaLogin',
       environment: 'playground',
       region: 'EU',
       theme: 'auto',
@@ -58,10 +76,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _signIn() async {
     await KlarnaSignInPlatform.signIn(
-      clientId: 'YOUR_CLIENT_ID',
+      clientId:
+          'klarna_test_client_dk4tcW85NzAlcHhER3MxVXhnNGxaQkR0WVMtdzFIdEwsMjI2ZDJhZGEtMzU3ZC00OWE0LWI2NGItODJmN2FmMDEyMGNlLDEsYmdrYUVpYWgrU014a2pBMlVsaFdvWTEzZExHRTRCSXA0THVDVVY5YlM5QT0',
       scope: 'openid offline_access profile:email',
-      market: 'SE',
-      locale: 'en-SE',
+      market: 'NA',
+      locale: 'en-NA',
     );
   }
 
@@ -80,7 +99,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: _signIn,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pinkAccent,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
               child: const Text("Sign in with Klarna"),
             ),

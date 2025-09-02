@@ -8,8 +8,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
+            
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -28,12 +27,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.klarna.mobile.sdk.activity.KlarnaRedirectReceiverActivity" android:exported="true" tools:node="replace">
+        <activity android:name="com.klarna.mobile.sdk.activity.KlarnaRedirectReceiverActivity"
+         android:exported="true" 
+         tools:replace="android:exported">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="com.unice.lqhair" android:host="klarnaLogin"/>
+                <data android:scheme="com.unice.longqihair" android:host="klarnaLogin"/>
             </intent-filter>
         </activity>
 

@@ -16,7 +16,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-
+import com.google.gson.Gson
 class KlarnaSignInFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     EventChannel.StreamHandler, ActivityAware ,KlarnaEventHandler {
 
@@ -120,18 +120,26 @@ class KlarnaSignInFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler
             else -> result.notImplemented()
         }
     }
+
+
     @MainThread
     override fun onEvent(klarnaComponent: com.klarna.mobile.sdk.api.component.KlarnaComponent, event: com.klarna.mobile.sdk.api.KlarnaProductEvent) {
         val map = HashMap<String, Any?>()
+        val gson = Gson()
+        val paramsMap: HashMap<String, Any?> = gson.fromJson(
+            gson.toJson(event.params),
+            HashMap::class.java
+        ) as HashMap<String, Any?>
+
         map["action"] = event.action
-        map["params"] = event.params
+        map["params"] = paramsMap
         eventSink?.success(map)
-    }
+    }   
     @MainThread
     override fun onError(klarnaComponent: com.klarna.mobile.sdk.api.component.KlarnaComponent, error: com.klarna.mobile.sdk.KlarnaMobileSDKError) {
         val map = HashMap<String, Any?>()
         map["action"] = "ERROR"
-        map["params"] = error.params
+        map["params"] = mapOf("message" to (error.message ?: error.toString()))
         eventSink?.success(map)
     }
 }
