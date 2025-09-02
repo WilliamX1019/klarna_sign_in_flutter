@@ -34,27 +34,40 @@ class _HomePageState extends State<HomePage> {
       final params = e.params;
 
       if (action == 'KlarnaSignInToken' && Platform.isAndroid) {
-        if (params != null && params['KlarnaSignInToken'] != null) {
-          final tokenData = params['KlarnaSignInToken'];
-          final idToken = tokenData['idToken'];
-          final accessToken = tokenData['accessToken'];
+        if (params != null) {
+          final idToken = params['idToken'];
+          final accessToken = params['accessToken'];
           print("✅ idToken: $idToken, accessToken: $accessToken");
-        } else {
-          print("⚠️ klarnaToken event received but tokenData is null");
         }
+
+      //   if (params != null && params['KlarnaSignInToken'] != null) {
+      //     final tokenData = params['KlarnaSignInToken'];
+      //     final idToken = tokenData['idToken'];
+      //     final accessToken = tokenData['accessToken'];
+      //     print("✅ idToken: $idToken, accessToken: $accessToken");
+      //   } else {
+      //     print("⚠️ klarnaToken event received but tokenData is null");
+      //   }
       }
       if (action == 'klarnaToken' && Platform.isIOS) {
-        if (params != null && params['klarnaToken'] != null) {
-          final tokenData = params['klarnaToken'];
-          final idToken = tokenData['idToken'];
-          final accessToken = tokenData['accessToken'];
+        if (params != null) {
+          final idToken = params['idToken'];
+          final accessToken = params['accessToken'];
           print("✅ idToken: $idToken, accessToken: $accessToken");
-        } else {
-          print("⚠️ klarnaToken event received but tokenData is null");
         }
+
+        //   if (params != null && params['klarnaToken'] != null) {
+        //     final tokenData = params['klarnaToken'];
+        //     final idToken = tokenData['idToken'];
+        //     final accessToken = tokenData['accessToken'];
+        //     print("✅ idToken: $idToken, accessToken: $accessToken");
+        //   } else {
+        //     print("⚠️ klarnaToken event received but tokenData is null");
+        //   }
       }
-      
-       else if (action == 'ERROR') {
+
+      //  else
+      if (action == 'ERROR') {
         final message = params?['message'] ?? "Unknown error";
         print("❌ Klarna error: $message");
       } else {

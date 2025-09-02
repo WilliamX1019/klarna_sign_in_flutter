@@ -13,9 +13,23 @@ class KlarnaEvent {
   KlarnaEvent(this.action, [this.params]);
 
   factory KlarnaEvent.fromMap(Map<dynamic, dynamic> map) {
+
+  final rawParams = (map['params'] as Map?)?.cast<String, dynamic>();
+
+  Map<String, dynamic>? normalizedParams;
+  if (rawParams != null) {
+    // 如果只有一层包裹 { klarnaToken: {...} }
+    if (rawParams.length == 1 && rawParams.values.first is Map) {
+      normalizedParams = (rawParams.values.first as Map).cast<String, dynamic>();
+    } else {
+      normalizedParams = rawParams;
+    }
+  }
+
+
     return KlarnaEvent(
       map['action'] as String,
-      (map['params'] as Map?)?.cast<String, dynamic>(),
+      normalizedParams,
     );
   }
 }
