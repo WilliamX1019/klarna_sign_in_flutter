@@ -25,8 +25,6 @@ class KlarnaEvent {
       normalizedParams = rawParams;
     }
   }
-
-
     return KlarnaEvent(
       map['action'] as String,
       normalizedParams,
