@@ -112,14 +112,14 @@ public class KlarnaSignInFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     // KlarnaEventHandler
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, dispatchedEvent event: KlarnaProductEvent) {
         
-    let map: [String: Any] = [
-        "action": event.action,
-        "params": serializeParam(event.params)
-    ]
+        let map: [String: Any] = [
+            "action": event.action,
+            "params": serializeParam(event.params)
+        ]
             // 确保在主线程回调 Flutter
-    DispatchQueue.main.async {
-        self.eventSink?(map)
-    }
+        DispatchQueue.main.async {
+            self.eventSink?(map)
+        }
         
     }
     public func klarnaComponent(_ klarnaComponent: KlarnaComponent, encounteredError error: KlarnaError) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:klarna_sign_in_flutter/klarna_sign_in_flutter.dart';
 
@@ -40,30 +41,17 @@ class _HomePageState extends State<HomePage> {
           print("✅ idToken: $idToken, accessToken: $accessToken");
         }
 
-      //   if (params != null && params['KlarnaSignInToken'] != null) {
-      //     final tokenData = params['KlarnaSignInToken'];
-      //     final idToken = tokenData['idToken'];
-      //     final accessToken = tokenData['accessToken'];
-      //     print("✅ idToken: $idToken, accessToken: $accessToken");
-      //   } else {
-      //     print("⚠️ klarnaToken event received but tokenData is null");
-      //   }
       }
       if (action == 'klarnaToken' && Platform.isIOS) {
         if (params != null) {
           final idToken = params['idToken'];
           final accessToken = params['accessToken'];
+
+          final jwt = JWT.decode(idToken);
+
+          print('Payload: ${jwt.payload} -runtimeType-- ${jwt.payload['email']}');
           print("✅ idToken: $idToken, accessToken: $accessToken");
         }
-
-        //   if (params != null && params['klarnaToken'] != null) {
-        //     final tokenData = params['klarnaToken'];
-        //     final idToken = tokenData['idToken'];
-        //     final accessToken = tokenData['accessToken'];
-        //     print("✅ idToken: $idToken, accessToken: $accessToken");
-        //   } else {
-        //     print("⚠️ klarnaToken event received but tokenData is null");
-        //   }
       }
 
       //  else
